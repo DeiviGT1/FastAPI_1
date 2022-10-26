@@ -1,3 +1,4 @@
+from doctest import Example
 from typing import Optional
 from enum import Enum
 from pydantic import BaseModel, Field
@@ -18,19 +19,33 @@ class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example = "Jose"
         )
     last_name: str = Field(
         min_length=1,
-        max_length=50
+        max_length=50,
+        example = "Tabarez"
         )
     age: int = Field(
         ...,
         gt = 0,
-        le = 115
+        le = 115,
+        example = 25
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default = None)
+    hair_color: Optional[HairColor] = Field(default=None, example = "brown")
+    is_married: Optional[bool] = Field(default = None, example = False)
+    
+    # class Config:
+    #     schema_extra = {
+    #         "example": { 
+    #             "first_name" : "David",
+    #             "last_name" : "Gonzalez",
+    #             "age" : 21,
+    #             "hair_color" : "black",
+    #             "is_married" : False
+    #         }
+    #     }
 
 class Location(BaseModel):
     ciry: str
@@ -84,11 +99,11 @@ def update_person(
         gt = 0
         ),
     person: Person = Body(...),
-    location: Location = Body(...)
+    #location: Location = Body(...)
 ):
-    results = person.dict()
-    results.update(location.dict())
-    return results
+    # results = person.dict()
+    # results.update(location.dict())
+    return person
 
 # if __name__ == "__main__":  
 #     uvicorn.run(app, host="127.0.0.1", port=5000)

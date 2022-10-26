@@ -13,6 +13,11 @@ class Person(BaseModel):
     hair_color: Optional[str] = None
     is_married: Optional[bool] = None
 
+class Location(BaseModel):
+    ciry: str
+    state: str
+    country: str
+
 @app.get("/")
 def home():
     return {"Hello": "World"}
@@ -49,6 +54,22 @@ def show_person(
         )
 ):
     return {person_id: "It exists!"}
+
+#Validaciones body parameter
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        title = "Person id",
+        description = "This is the person id",
+        gt = 0
+        ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return results
 
 # if __name__ == "__main__":  
 #     uvicorn.run(app, host="127.0.0.1", port=5000)

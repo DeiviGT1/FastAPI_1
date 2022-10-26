@@ -1,17 +1,36 @@
 from typing import Optional
-from pydantic import BaseModel
+from enum import Enum
+from pydantic import BaseModel, Field
 from fastapi import FastAPI, Body, Query, Path
 import uvicorn
 
 app = FastAPI()
 
+class HairColor(Enum):
+    white = "white"
+    blode = "blonde"
+    brown = "brown"
+    black = "black"
+    red = "red"
+
 # Modelos
 class Person(BaseModel):
-    first_name: str
-    last_name: str
-    age: int
-    hair_color: Optional[str] = None
-    is_married: Optional[bool] = None
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        )
+    last_name: str = Field(
+        min_length=1,
+        max_length=50
+        )
+    age: int = Field(
+        ...,
+        gt = 0,
+        le = 115
+    )
+    hair_color: Optional[HairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default = None)
 
 class Location(BaseModel):
     ciry: str

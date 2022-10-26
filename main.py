@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
-from fastapi import FastAPI, Body, Query
+from fastapi import FastAPI, Body, Query, Path
 import uvicorn
 
 app = FastAPI()
@@ -25,10 +25,30 @@ def create_person(person: Person = Body(...)):
 #Validaciones Query parameters
 @app.get("/person/detail")
 def show_person(
-    name: Optional[str] = Query(None, min_length=1, max_length=50),
-    age: int = Query(...)   
+    name: Optional[str] = Query(
+        None,
+        min_length=1,
+        max_length=50,
+        title = "Person name",
+        description = "This is the person name. It's between 1 and 50 characters"
+        ),
+    age: int = Query(
+        ...,
+        title = "Person age",
+        description = "This is the person age, It's required"
+        )
 ):
     return {name: age}
+
+#Validaciones path parameters
+@app.get("/person/detail/{person_id}")
+def show_person(
+    person_id: int = Path(
+        ...,
+        gt=0
+        )
+):
+    return {person_id: "It exists!"}
 
 # if __name__ == "__main__":  
 #     uvicorn.run(app, host="127.0.0.1", port=5000)

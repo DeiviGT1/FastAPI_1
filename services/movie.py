@@ -34,3 +34,9 @@ class MovieService():
     result.category = data.category
     self.db.commit()
     return
+
+  def delete_movie(self, id):
+    result = self.db.query(MovieModel).filter(MovieModel.id == id).first()
+    self.db.delete(result)
+    self.db.commit()
+    return

@@ -13,7 +13,6 @@ app.version = "0.0.1"
 #Es una funcion de fastAPI que sirve para añadir middlewares
 app.add_middleware(ErrorHandler)
 
-
 Base.metadata.create_all(bind=engine)
 
 movies = [

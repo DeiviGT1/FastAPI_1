@@ -34,9 +34,11 @@ movies = [
 	}
 ]
 
+reader = open("./index.html", "r")
+
 @app.get("/", tags=["Home"])
 def message():
-  return HTMLResponse(content="<h1>¡Hola mundo!</h1>")
+  return HTMLResponse(reader.read())
 
 app.include_router(movie_router)
 app.include_router(user_router)
